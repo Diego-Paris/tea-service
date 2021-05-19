@@ -3,3 +3,6 @@
 
 
 <a href="https://ibb.co/KKdfwvJ"><img src="https://i.ibb.co/3R2jzZn/banner.png" alt="banner" border="0"></a><br /><a target='_blank' href='https://freeonlinedice.com/'></a><br />
+
+
+<div style="text-align:center"><img src="https://i.ibb.co/3R2jzZn/banner.png" /></div>
