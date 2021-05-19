@@ -13,7 +13,7 @@ var (
 	// Port that the server will be listening on.
 	Port int
 
-	// Environment, development or production.
+	// Environment development or production.
 	Environment string
 
 	// MongoCredentials is the URI Link to connect with MongoDB.
