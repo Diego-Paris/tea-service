@@ -8,7 +8,7 @@ import (
 
 func main() {
 
-	fmt.Printf("%v, %T\n", config.Globals.Port, config.Globals.Port)
-	fmt.Println(config.Globals.Environment)
-	fmt.Println(config.Globals.MongoCredentials)
+	fmt.Println(config.Port)
+	fmt.Println(config.Environment)
+	fmt.Println(config.MongoCredentials)
 }
