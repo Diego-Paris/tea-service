@@ -3,6 +3,7 @@ package config
 import (
 	"log"
 	"os"
+	"regexp"
 	"strconv"
 
 	"github.com/joho/godotenv"
@@ -22,7 +23,14 @@ var (
 func init() {
 
 	// Load in environment variables
-	err := godotenv.Load()
+	// Regex allows to run through standard and debug consoles
+	// TODO check if this adds significant complexity and if it helps debug servers
+	projectDirName := "tea-service"
+	re := regexp.MustCompile(`^(.*` + projectDirName + `)`)
+	cwd, _ := os.Getwd()
+	rootPath := re.Find([]byte(cwd))
+
+	err := godotenv.Load(string(rootPath) + `/.env`)
 	if err != nil {
 		log.Fatalln("Error loading .env file\n", err)
 	}
