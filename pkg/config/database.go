@@ -11,13 +11,13 @@ import (
 )
 
 /*
-Sets up connection to database.
+SetupDB Sets up connection to database.
 
 Establishes a default configuration for the mgm library,
 to then be used throughout the project. It then
-makes a call to pingDB() which uses the default mongo 
-driver to connect a client to be used for a ping, if 
-no errors ocurred then the ping was successful 
+makes a call to pingDB() which uses the default mongo
+driver to connect a client to be used for a ping, if
+no errors occurred then the ping was successful
 and we can then use mgm library.
 */
 func SetupDB() error {
@@ -68,7 +68,7 @@ func pingDB(clientOptions *options.ClientOptions) error {
 	}
 
 	// Finally ping database and check if any
-	// errors ocurred establishing a connection
+	// errors occurred establishing a connection
 	err = client.Ping(ctx, readpref.Primary())
 
 	if err != nil {
