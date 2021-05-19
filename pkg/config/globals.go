@@ -24,28 +24,28 @@ func init() {
 	// Load in environment variables
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file", err)
+		log.Fatalln("Error loading .env file\n", err)
 	}
 
 	// Set Port
 	portString := os.Getenv("PORT")
 	port, err := strconv.Atoi(portString)
 	if err != nil {
-		log.Fatal("Invalid port: ", err)
+		log.Fatalln("Invalid port:\n", err)
 	}
 	Port = port
 
 	// Set Server Environment
 	serverEnv := os.Getenv("SERVER_ENV")
 	if serverEnv != "development" && serverEnv != "production" {
-		log.Fatal("Invalid server environment, must be development or production")
+		log.Fatalln("Invalid server environment, must be development or production")
 	}
 	Environment = serverEnv
 
 	// Set MongoDB URI
 	MongoURI := os.Getenv("MONGO_CREDENTIALS")
 	if len(MongoURI) <= 0 {
-		log.Fatal("Invalid Mongo URI, must not be empty")
+		log.Fatalln("Invalid Mongo URI, must not be empty")
 	}
 	MongoCredentials = MongoURI
 
