@@ -3,3 +3,7 @@
 
 # vscode config
 .vscode
+
+# local images
+*.jpg
+*.png

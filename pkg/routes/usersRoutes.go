@@ -13,7 +13,10 @@ func initializeUserRoutes(prefix string, router *mux.Router) {
 
 	// Get all users
 	subrouter.HandleFunc("/", controllers.GetAllUsers).Methods("GET")
-	
+	// wack
+	subrouter.HandleFunc("/wack", controllers.Wack).Methods("GET")
 	// Get user by ID
 	subrouter.HandleFunc("/{id}", controllers.GetUserByID).Methods("GET")
+
+	
 }
