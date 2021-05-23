@@ -23,5 +23,5 @@ func main() {
 	routes.InitializeAllRoutes(router)
 
 	// Serve and run application
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(config.Port, router))
 }

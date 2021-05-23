@@ -11,13 +11,16 @@ import (
 
 var (
 	// Port that the server will be listening on.
-	Port int
+	Port string
 
 	// Environment development or production.
 	Environment string
 
 	// MongoCredentials is the URI Link to connect with MongoDB.
 	MongoCredentials string
+
+	// DBName is the name of the database that contains our collections
+	DBName string
 )
 
 func init() {
@@ -37,11 +40,11 @@ func init() {
 
 	// Set Port
 	portString := os.Getenv("PORT")
-	port, err := strconv.Atoi(portString)
+	_, err = strconv.Atoi(portString) // check if number
 	if err != nil {
 		log.Fatalln("Invalid port:\n", err)
 	}
-	Port = port
+	Port = ":" + portString
 
 	// Set Server Environment
 	serverEnv := os.Getenv("SERVER_ENV")
@@ -57,4 +60,10 @@ func init() {
 	}
 	MongoCredentials = MongoURI
 
+	// Set name of database
+	databaseString := os.Getenv("DB_NAME")
+	if len(databaseString) <= 0 {
+		log.Fatalln("Invalid database name, must not be empty")
+	}
+	DBName = databaseString
 }

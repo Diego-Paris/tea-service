@@ -9,7 +9,6 @@ import (
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
 
 	response := message{"Get all users"}
-
 	respondWithJSON(w, http.StatusOK, response)
 }
 

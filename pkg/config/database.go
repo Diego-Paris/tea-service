@@ -28,7 +28,7 @@ func SetupDB() error {
 	clientOptions := options.Client().ApplyURI(MongoCredentials)
 
 	// Setup mgm default config
-	err = mgm.SetDefaultConfig(nil, "Cluster0", clientOptions)
+	err = mgm.SetDefaultConfig(nil, DBName, clientOptions)
 	if err != nil {
 		return err
 	}
