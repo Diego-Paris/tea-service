@@ -6,7 +6,6 @@ import (
 
 	"github.com/Diego-Paris/tea-service/pkg/config"
 	"github.com/Diego-Paris/tea-service/pkg/routes"
-	"github.com/gorilla/mux"
 )
 
 func main() {
@@ -19,9 +18,16 @@ func main() {
 	log.Println("Connected to Database!")
 
 	// Setup all routes for the application
-	router := mux.NewRouter().StrictSlash(true)
-	routes.InitializeAllRoutes(router)
+	//router := mux.NewRouter().StrictSlash(true)
+	//routes.InitializeAllRoutes(router)
+	router := routes.NewNewRouter()
+
+	// m := http.NewServeMux()
+	// m.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
+	// 	req.URL.Path = utils.AddTrailingSlash(req.URL.Path)
+	// 	router.ServeHTTP(w, req)
+	// })
 
 	// Serve and run application
-	log.Fatal(http.ListenAndServe(config.Port, router))
+	log.Fatal(http.ListenAndServe(config.Port, router)) //! change m back to router
 }
