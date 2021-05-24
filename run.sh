@@ -1,1 +1,1 @@
-go run cmd/main/main.go
+nodemon --exec go run cmd/main/main.go --signal SIGTERM
