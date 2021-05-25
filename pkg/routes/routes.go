@@ -17,7 +17,7 @@ type Route struct {
 
 type Routes []Route
 
-func NewNewRouter() *http.ServeMux {
+func NewRouter() *http.ServeMux {
 
 	router := mux.NewRouter()
 
@@ -29,7 +29,7 @@ func NewNewRouter() *http.ServeMux {
 	// Catches all routes that are not declared
 	router.NotFoundHandler = http.HandlerFunc(controllers.NotFound)
 
-	// Catches all unrecovered panics that may occur
+	// Catches unrecovered panics that may occur
 	router.Use(controllers.Recovery)
 
 	m := http.NewServeMux()
@@ -50,39 +50,4 @@ func setRoutes(prefix string, routes Routes, router *mux.Router) *mux.Router {
 			Handler(route.HandlerFunc)
 	}
 	return router
-}
-
-func NewRouter() *mux.Router {
-
-	router := mux.NewRouter() //.StrictSlash(true)
-
-	//router.Use(controllers.AddTrailingSlash)
-
-	//setUserRoutes("/users", router)
-
-	// Catches requests with unsupported methods
-	router.MethodNotAllowedHandler = http.HandlerFunc(controllers.MethodNotAllowed)
-
-	// Catches all routes that are not declared
-	router.NotFoundHandler = http.HandlerFunc(controllers.NotFound)
-
-	// Catches all unrecovered panics that may occur
-	router.Use(controllers.Recovery)
-
-	return router
-}
-
-func InitializeAllRoutes(router *mux.Router) {
-
-	// Initialize USERS routes
-	initializeUserRoutes("/users/", router)
-
-	// Catches requests with unsupported methods
-	router.MethodNotAllowedHandler = http.HandlerFunc(controllers.MethodNotAllowed)
-
-	// Catches all routes that are not declared
-	router.NotFoundHandler = http.HandlerFunc(controllers.NotFound)
-
-	// Catches all unrecovered panics that may occur
-	router.Use(controllers.Recovery)
 }

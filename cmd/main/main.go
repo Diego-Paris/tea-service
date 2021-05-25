@@ -18,16 +18,8 @@ func main() {
 	log.Println("Connected to Database!")
 
 	// Setup all routes for the application
-	//router := mux.NewRouter().StrictSlash(true)
-	//routes.InitializeAllRoutes(router)
-	router := routes.NewNewRouter()
-
-	// m := http.NewServeMux()
-	// m.HandleFunc("/", func(w http.ResponseWriter, req *http.Request) {
-	// 	req.URL.Path = utils.AddTrailingSlash(req.URL.Path)
-	// 	router.ServeHTTP(w, req)
-	// })
+	router := routes.NewRouter()
 
 	// Serve and run application
-	log.Fatal(http.ListenAndServe(config.Port, router)) //! change m back to router
+	log.Fatal(http.ListenAndServe(config.Port, router))
 }
