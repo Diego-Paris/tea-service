@@ -2,14 +2,14 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
-	"log"
 	"net/http"
 
 	"github.com/gorilla/mux"
+	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo"
 
-	"github.com/Diego-Paris/tea-service/pkg/models"
+	userrepo "github.com/Diego-Paris/tea-service/pkg/models/user_repo"
 )
 
 type UserJSON struct {
@@ -29,22 +29,51 @@ func (uj *UserJSON) Decode(requestBody io.ReadCloser) error {
 }
 
 func GetAllUsers(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("URL: ", r.URL)
-	fmt.Println("METHOD: ", r.Method)
-	log.Println("inside of get all users")
-	response := message{"Get all users new renewed and amped"}
-	respondWithJSON(w, http.StatusOK, response)
+
+	result, err := userrepo.GetAllUsers()
+
+	if err != nil {
+		response := message{"Could not retrieve users. " + err.Error()}
+		respondWithJSON(w, http.StatusInternalServerError, response)
+		return
+	}
+
+	//response := message{"Get all users new renewed and amped"}
+	respondWithJSON(w, http.StatusOK, result)
 }
 
 func GetUserByID(w http.ResponseWriter, r *http.Request) {
 
 	id := mux.Vars(r)["id"]
-	response := message{"Found user: " + id}
-	respondWithJSON(w, http.StatusOK, response)
+
+	// check if id in path is a valid objectID
+	valid := primitive.IsValidObjectID(id)
+	if !valid {
+		response := message{"User ID is not valid."}
+		respondWithJSON(w, http.StatusBadRequest, response)
+		return
+	}
+
+	// search a User by the ID given
+	result, err := userrepo.GetUserByID(id)
+
+	if err == mongo.ErrNoDocuments {
+		response := message{"User does not exist."}
+		respondWithJSON(w, http.StatusNotFound, response)
+		return
+	}
+
+	if err != nil {
+		response := message{"Could not retrieve user. (" + err.Error() + ")"}
+		respondWithJSON(w, http.StatusInternalServerError, response)
+		return
+	}
+
+	respondWithJSON(w, http.StatusOK, result)
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
-	
+
 	var err error
 
 	// Decode request body into struct
@@ -53,12 +82,11 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		response := message{"Malformed request."}
 		respondWithJSON(w, http.StatusBadRequest, response)
-		return 
+		return
 	}
 
-
 	// Create user obj
-	user, err := models.NewUser(
+	user, err := userrepo.NewUser(
 		userJson.FirstName,
 		userJson.LastName,
 		userJson.Email,
@@ -70,23 +98,24 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	alreadyExists, err := models.CheckUserExistanceByEmail(user.Email)
+	// check if email is already in use
+	emailExists, err := userrepo.IsEmailAlreadyInUse(user.GetEmail())
 	if err != nil {
 		response := message{"Could not create user. " + err.Error()}
 		respondWithJSON(w, http.StatusInternalServerError, response)
 		return
 	}
 
-	if alreadyExists {
+	if emailExists {
 		response := message{"User already exists"}
 		respondWithJSON(w, http.StatusConflict, response)
 		return
 	}
 
 	// save user
-	err = user.SaveUser()
+	err = userrepo.CreateNew(user)
 	if err != nil {
-		response := message{"Could not save user. " + err.Error()}
+		response := message{"Could not create user. " + err.Error()}
 		respondWithJSON(w, http.StatusInternalServerError, response)
 		return
 	}
